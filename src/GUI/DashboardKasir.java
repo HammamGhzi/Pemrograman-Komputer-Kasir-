@@ -148,7 +148,7 @@ public class DashboardKasir extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(btnLogout)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 815, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 833, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(63, 63, 63)
                 .addComponent(lblNama)
@@ -239,7 +239,7 @@ public class DashboardKasir extends javax.swing.JFrame {
                         .addComponent(tglSetrikaSaja)
                         .addGap(18, 18, 18)
                         .addComponent(tglCuciSepatu)))
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
