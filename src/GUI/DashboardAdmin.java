@@ -4,7 +4,9 @@
  */
 package GUI;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
  *
@@ -16,6 +18,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         initComponents();
         lblNama.setText("Selamat Datang, " + nama + " (Admin)");
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+        styleButtons();
     }
 
     public DashboardAdmin() {
@@ -30,7 +33,6 @@ public class DashboardAdmin extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -41,6 +43,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         btnManageUser = new javax.swing.JButton();
         manageProduct = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
+        btnRiwayatTransaksi = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -48,42 +51,50 @@ public class DashboardAdmin extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(251, 251, 251));
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setBackground(new java.awt.Color(198, 231, 255));
-        jPanel5.setLayout(new java.awt.GridBagLayout());
+        jPanel5.setBackground(new java.awt.Color(31, 95, 120));
 
+        lblNama.setForeground(new java.awt.Color(255, 255, 255));
         lblNama.setText("jlabel");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(27, 217, 0, 0);
-        jPanel5.add(lblNama, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(30, 41, 59));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("DASHBOARD LAUNDRY");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 280, 22, 0);
-        jPanel5.add(jLabel1, gridBagConstraints);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/person.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 6, 0, 6);
-        jPanel5.add(jLabel2, gridBagConstraints);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(593, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(337, 337, 337)
+                .addComponent(lblNama)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(58, 58, 58))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(lblNama))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(19, 19, 19))
+        );
 
         jPanel4.add(jPanel5, java.awt.BorderLayout.PAGE_START);
 
-        jPanel6.setBackground(new java.awt.Color(212, 246, 255));
+        jPanel6.setBackground(new java.awt.Color(143, 182, 195));
+        jPanel6.setForeground(new java.awt.Color(255, 255, 255));
 
-        btnManageUser.setBackground(new java.awt.Color(212, 246, 255));
+        btnManageUser.setBackground(new java.awt.Color(143, 182, 195));
+        btnManageUser.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnManageUser.setForeground(new java.awt.Color(255, 255, 255));
         btnManageUser.setText("Manage User");
         btnManageUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,7 +102,9 @@ public class DashboardAdmin extends javax.swing.JFrame {
             }
         });
 
-        manageProduct.setBackground(new java.awt.Color(212, 246, 255));
+        manageProduct.setBackground(new java.awt.Color(143, 182, 195));
+        manageProduct.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        manageProduct.setForeground(new java.awt.Color(255, 255, 255));
         manageProduct.setText("Manage Product");
         manageProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,12 +112,23 @@ public class DashboardAdmin extends javax.swing.JFrame {
             }
         });
 
-        btnLogout.setBackground(new java.awt.Color(255, 102, 102));
+        btnLogout.setBackground(new java.awt.Color(201, 74, 74));
         btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("Logout");
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogoutActionPerformed(evt);
+            }
+        });
+
+        btnRiwayatTransaksi.setBackground(new java.awt.Color(143, 182, 195));
+        btnRiwayatTransaksi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRiwayatTransaksi.setForeground(new java.awt.Color(255, 255, 255));
+        btnRiwayatTransaksi.setText("Riwayat Transaksi");
+        btnRiwayatTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRiwayatTransaksiActionPerformed(evt);
             }
         });
 
@@ -115,13 +139,14 @@ public class DashboardAdmin extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(btnLogout))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnManageUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(manageProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(btnLogout)))
+                            .addComponent(manageProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRiwayatTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -131,7 +156,9 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 .addComponent(btnManageUser)
                 .addGap(18, 18, 18)
                 .addComponent(manageProduct)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnRiwayatTransaksi)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
                 .addComponent(btnLogout)
                 .addGap(28, 28, 28))
         );
@@ -166,17 +193,51 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnManageUserActionPerformed
 
+    private void styleButtons() {
+        btnLogout.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        btnLogout.setBackground(new Color(204, 0, 0));   // merah, boleh diganti
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.setFocusPainted(false);
+        btnLogout.setBorderPainted(false);
+        btnLogout.setContentAreaFilled(true);
+        btnLogout.setOpaque(true);
+
+        btnManageUser.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        btnManageUser.setBackground(new Color(143, 182, 195));   // merah, boleh diganti
+        btnManageUser.setForeground(Color.WHITE);
+        btnManageUser.setFocusPainted(false);
+        btnManageUser.setBorderPainted(false);
+        btnManageUser.setContentAreaFilled(true);
+        btnManageUser.setOpaque(true);
+
+        manageProduct.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        manageProduct.setBackground(new Color(143, 182, 195));   // merah, boleh diganti
+        manageProduct.setForeground(Color.WHITE);
+        manageProduct.setFocusPainted(false);
+        manageProduct.setBorderPainted(false);
+        manageProduct.setContentAreaFilled(true);
+        manageProduct.setOpaque(true);
+
+        btnRiwayatTransaksi.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        btnRiwayatTransaksi.setBackground(new Color(143, 182, 195));   // merah, boleh diganti
+        btnRiwayatTransaksi.setForeground(Color.WHITE);
+        btnRiwayatTransaksi.setFocusPainted(false);
+        btnRiwayatTransaksi.setBorderPainted(false);
+        btnRiwayatTransaksi.setContentAreaFilled(true);
+        btnRiwayatTransaksi.setOpaque(true);
+
+    }
     private void manageProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageProductActionPerformed
-       try{
+        try {
             ProductManage ProductManage = new ProductManage();    // Buat objek panel CRUD
             mainPanel.removeAll();               // Hapus isi panel sebelumnya
             mainPanel.add(ProductManage);                 // Tambahkan panel baru
             mainPanel.revalidate();              // Refresh layout
             mainPanel.repaint();
             ProductManage.loadTableProduct();
-       }catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Eror: " + e.getMessage());
-       }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Eror: " + e.getMessage());
+        }
     }//GEN-LAST:event_manageProductActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -193,6 +254,18 @@ public class DashboardAdmin extends javax.swing.JFrame {
             login.setVisible(true);
         }
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnRiwayatTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRiwayatTransaksiActionPerformed
+        riwayatTransaksiAdmin riwayat = new riwayatTransaksiAdmin();
+
+        mainPanel.removeAll();
+        mainPanel.add(riwayat);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+
+        riwayat.loadRiwayatAdmin();
+        riwayat.loadKasir();
+    }//GEN-LAST:event_btnRiwayatTransaksiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,6 +306,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnManageUser;
+    private javax.swing.JButton btnRiwayatTransaksi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel4;

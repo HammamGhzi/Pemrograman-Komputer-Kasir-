@@ -6,6 +6,9 @@ package GUI;
 
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Image;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -13,6 +16,10 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 /**
@@ -22,17 +29,27 @@ import javax.swing.Timer;
 public class DashboardKasir extends javax.swing.JFrame {
 
     DefaultTableModel model;
+    String namaKasir;
+    int idKasir;
 
     public DashboardKasir(String nama) {
         initComponents();
         lblNama.setText("Selamat Datang, " + nama + " (Kasir)");
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         styleButtons();
+        this.namaKasir = nama;
+        ambilIdKasir();
+        loadLayanan();
+
     }
 
     public DashboardKasir() {
         initComponents();
-        styleButtons();   // <-- PANGGIL DI SINI
+        panelProduk.setLayout(new GridLayout(4, 0, 20, 20));
+        Dimension toggleSize = new Dimension(94, 91);
+
+// 4 baris, kolom otomatis
+// <-- PANGGIL DI SINI
     }
 
     private void styleButtons() {
@@ -40,8 +57,6 @@ public class DashboardKasir extends javax.swing.JFrame {
         // contoh: jButtonSearch, jButtonRefresh
 
         // Tombol SEARCH (misal biru)
-       
-
         // tombol logout
         btnLogout.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
         btnLogout.setBackground(new Color(204, 0, 0));   // merah, boleh diganti
@@ -50,6 +65,22 @@ public class DashboardKasir extends javax.swing.JFrame {
         btnLogout.setBorderPainted(false);
         btnLogout.setContentAreaFilled(true);
         btnLogout.setOpaque(true);
+
+        btnKeuangan.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        btnKeuangan.setBackground(new Color(31, 95, 120));   // merah, boleh diganti
+        btnKeuangan.setForeground(Color.WHITE);
+        btnKeuangan.setFocusPainted(false);
+        btnKeuangan.setBorderPainted(false);
+        btnKeuangan.setContentAreaFilled(true);
+        btnKeuangan.setOpaque(true);
+
+        btnHistoryProduk.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        btnHistoryProduk.setBackground(new Color(31, 95, 120));   // merah, boleh diganti
+        btnHistoryProduk.setForeground(Color.WHITE);
+        btnHistoryProduk.setFocusPainted(false);
+        btnHistoryProduk.setBorderPainted(false);
+        btnHistoryProduk.setContentAreaFilled(true);
+        btnHistoryProduk.setOpaque(true);
 
     }
 
@@ -68,14 +99,9 @@ public class DashboardKasir extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         lblNama = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnKeuangan = new javax.swing.JButton();
+        btnHistoryProduk = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        tglCuciKering = new javax.swing.JToggleButton();
-        tglCuciSetrika = new javax.swing.JToggleButton();
-        tglSetrikaSaja = new javax.swing.JToggleButton();
-        tglCuciSepatu = new javax.swing.JToggleButton();
-        tglKarpet = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -108,8 +134,17 @@ public class DashboardKasir extends javax.swing.JFrame {
         txtTotal = new javax.swing.JTextField();
         txtBayar = new javax.swing.JTextField();
         txtKembalian = new javax.swing.JTextField();
+        pnlProduk = new javax.swing.JPanel();
+        panelProduk = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblLayanan = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -124,7 +159,7 @@ public class DashboardKasir extends javax.swing.JFrame {
         lblNama.setForeground(new java.awt.Color(255, 255, 255));
         lblNama.setText("jLabel1");
 
-        btnLogout.setBackground(new java.awt.Color(255, 102, 102));
+        btnLogout.setBackground(new java.awt.Color(201, 74, 74));
         btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("Logout");
@@ -134,10 +169,18 @@ public class DashboardKasir extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Laporan Keuangan Harian");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnKeuangan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-money-25.png"))); // NOI18N
+        btnKeuangan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnKeuanganActionPerformed(evt);
+            }
+        });
+
+        btnHistoryProduk.setBackground(new java.awt.Color(31, 95, 120));
+        btnHistoryProduk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-history-25.png"))); // NOI18N
+        btnHistoryProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistoryProdukActionPerformed(evt);
             }
         });
 
@@ -146,117 +189,41 @@ public class DashboardKasir extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(20, 20, 20)
                 .addComponent(btnLogout)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 833, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(63, 63, 63)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 926, Short.MAX_VALUE)
+                .addComponent(btnHistoryProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(btnKeuangan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
                 .addComponent(lblNama)
                 .addGap(47, 47, 47))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLogout)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblNama)
-                        .addComponent(jButton1)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnHistoryProduk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnKeuangan, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(lblNama))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(btnLogout)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jPanel1.add(jPanel6, java.awt.BorderLayout.PAGE_START);
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setLayout(new java.awt.GridLayout(1, 0));
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        tglCuciKering.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-laundry-64.png"))); // NOI18N
-        tglCuciKering.setText("Cuci Kering");
-        tglCuciKering.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        tglCuciKering.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tglCuciKering.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglCuciKeringActionPerformed(evt);
-            }
-        });
-
-        tglCuciSetrika.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-iron-64.png"))); // NOI18N
-        tglCuciSetrika.setText("Cuci Setrika");
-        tglCuciSetrika.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        tglCuciSetrika.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tglCuciSetrika.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglCuciSetrikaActionPerformed(evt);
-            }
-        });
-
-        tglSetrikaSaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-iron-64.png"))); // NOI18N
-        tglSetrikaSaja.setText("Setrika Saja");
-        tglSetrikaSaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        tglSetrikaSaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tglSetrikaSaja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglSetrikaSajaActionPerformed(evt);
-            }
-        });
-
-        tglCuciSepatu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-shoes-64.png"))); // NOI18N
-        tglCuciSepatu.setText("Cuci Sepatu");
-        tglCuciSepatu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        tglCuciSepatu.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tglCuciSepatu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglCuciSepatuActionPerformed(evt);
-            }
-        });
-
-        tglKarpet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-carpet-64.png"))); // NOI18N
-        tglKarpet.setText("Karpet");
-        tglKarpet.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        tglKarpet.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        tglKarpet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglKarpetActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tglKarpet)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tglCuciKering)
-                        .addGap(18, 18, 18)
-                        .addComponent(tglCuciSetrika)
-                        .addGap(18, 18, 18)
-                        .addComponent(tglSetrikaSaja)
-                        .addGap(18, 18, 18)
-                        .addComponent(tglCuciSepatu)))
-                .addContainerGap(157, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tglCuciKering)
-                        .addComponent(tglCuciSetrika)
-                        .addComponent(tglSetrikaSaja))
-                    .addComponent(tglCuciSepatu))
-                .addGap(38, 38, 38)
-                .addComponent(tglKarpet)
-                .addContainerGap(328, Short.MAX_VALUE))
-        );
-
-        jPanel7.add(jPanel2);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -272,14 +239,25 @@ public class DashboardKasir extends javax.swing.JFrame {
         jLabel5.setText("Tanggal");
 
         txtTanggal.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        txtTanggal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTanggalActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("ID Barang");
 
-        jLabel7.setText("Nama Barang");
+        jLabel7.setText("Nama Layanan");
 
         jLabel8.setText("Harga Per Kg/Pasang");
 
         jLabel9.setText("Jumlah");
+
+        txtNamaBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaBarangActionPerformed(evt);
+            }
+        });
 
         tblTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -290,7 +268,7 @@ public class DashboardKasir extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID Barang", "Nama Barang", "Jumlah", "Harga", "Subtotal"
+                "ID Barang", "Nama Layanan", "Jumlah", "Harga", "Subtotal"
             }
         ));
         jScrollPane2.setViewportView(tblTransaksi);
@@ -420,7 +398,7 @@ public class DashboardKasir extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(jLabel1)
-                        .addGap(41, 41, 41)
+                        .addGap(62, 62, 62)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtNoTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -475,14 +453,71 @@ public class DashboardKasir extends javax.swing.JFrame {
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
+        pnlProduk.setBackground(new java.awt.Color(255, 255, 255));
+
+        panelProduk.setBackground(new java.awt.Color(255, 255, 255));
+
+        tblLayanan.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Layanan", "Harga"
+            }
+        ));
+        tblLayanan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLayananMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblLayanan);
+
+        javax.swing.GroupLayout panelProdukLayout = new javax.swing.GroupLayout(panelProduk);
+        panelProduk.setLayout(panelProdukLayout);
+        panelProdukLayout.setHorizontalGroup(
+            panelProdukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProdukLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelProdukLayout.setVerticalGroup(
+            panelProdukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelProdukLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnlProdukLayout = new javax.swing.GroupLayout(pnlProduk);
+        pnlProduk.setLayout(pnlProdukLayout);
+        pnlProdukLayout.setHorizontalGroup(
+            pnlProdukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProdukLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(panelProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+        pnlProdukLayout.setVerticalGroup(
+            pnlProdukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlProdukLayout.createSequentialGroup()
+                .addGap(0, 23, Short.MAX_VALUE)
+                .addComponent(panelProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
+                .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -490,6 +525,9 @@ public class DashboardKasir extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(23, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel3);
@@ -527,10 +565,6 @@ public class DashboardKasir extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void tglCuciKeringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglCuciKeringActionPerformed
-        pilihProduk("Cuci Kering");
-    }//GEN-LAST:event_tglCuciKeringActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         model = new DefaultTableModel(
                 new Object[]{"ID Barang", "Nama Barang", "Jumlah", "Harga", "Subtotal"},
@@ -540,28 +574,13 @@ public class DashboardKasir extends javax.swing.JFrame {
         tampilNoTransaksi();
         tanggalJam();;
         tampilIdCustomer();
+        
 
     }//GEN-LAST:event_formWindowOpened
 
     private void txtBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBayarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBayarActionPerformed
-
-    private void tglCuciSetrikaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglCuciSetrikaActionPerformed
-        pilihProduk("Cuci Setrika");
-    }//GEN-LAST:event_tglCuciSetrikaActionPerformed
-
-    private void tglSetrikaSajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSetrikaSajaActionPerformed
-        pilihProduk("Setrika Saja");
-    }//GEN-LAST:event_tglSetrikaSajaActionPerformed
-
-    private void tglCuciSepatuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglCuciSepatuActionPerformed
-        pilihProduk("Cuci Sepatu");
-    }//GEN-LAST:event_tglCuciSepatuActionPerformed
-
-    private void tglKarpetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglKarpetActionPerformed
-        pilihProduk("Karpet");
-    }//GEN-LAST:event_tglKarpetActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         if (txtJumlah.getText().isEmpty()) {
@@ -613,12 +632,140 @@ public class DashboardKasir extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBayarKeyReleased
 
     private void btnSimpanCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanCetakActionPerformed
-        // TODO add your handling code here:
+
+        try {
+            Connection c = koneksi.getConnection();
+            String sqlCustomer = "INSERT INTO customer (nama_customer) VALUES (?)";
+            PreparedStatement psCustomer
+                    = c.prepareStatement(sqlCustomer, Statement.RETURN_GENERATED_KEYS);
+
+            psCustomer.setString(1, txtNamaCustomer.getText());
+            psCustomer.executeUpdate();
+
+// ambil ID customer
+            ResultSet rs = psCustomer.getGeneratedKeys();
+            int idCustomer = 0;
+            if (rs.next()) {
+                idCustomer = rs.getInt(1);
+            }
+
+            String sql = "INSERT INTO transaksi "
+                    + "(no_transaksi, id_customer, id_user,  total, bayar, kembalian,tanggal) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement ps = c.prepareStatement(sql);
+
+            ps.setString(1, txtNoTransaksi.getText());
+            ps.setInt(2, Integer.parseInt(txtIdCustomer.getText()));
+            ps.setInt(3, idKasir);
+            ps.setDouble(4, Double.parseDouble(txtTotal.getText()));
+            ps.setDouble(5, Double.parseDouble(txtBayar.getText()));
+            ps.setDouble(6, Double.parseDouble(txtKembalian.getText()));
+            SimpleDateFormat sdfDB = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            ps.setString(7, sdfDB.format(new Date()));
+
+            ps.executeUpdate();
+            // ambil id transaksi terakhir
+// ================== INSERT DETAIL TRANSAKSI ==================
+            String sqlDelete = "DELETE FROM detail_transaksi WHERE no_transaksi = ?";
+            PreparedStatement psDelete = c.prepareStatement(sqlDelete);
+            psDelete.setString(1, txtNoTransaksi.getText());
+            psDelete.executeUpdate();
+
+            String sqlDetail = "INSERT INTO detail_transaksi "
+                    + "(no_transaksi, id_produk, harga, jumlah, subtotal) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+
+            PreparedStatement psDetail = c.prepareStatement(sqlDetail);
+
+            for (int i = 0; i < tblTransaksi.getRowCount(); i++) {
+
+                int idProduk = Integer.parseInt(
+                        tblTransaksi.getValueAt(i, 0).toString()
+                );
+
+                double hargaDouble = Double.parseDouble(
+                        tblTransaksi.getValueAt(i, 3).toString()
+                );
+                int harga = (int) hargaDouble;
+
+                int jumlah = (int) Double.parseDouble(
+                        tblTransaksi.getValueAt(i, 2).toString()
+                );
+
+                int subtotal = (int) Double.parseDouble(
+                        tblTransaksi.getValueAt(i, 4).toString()
+                );
+
+                psDetail.setString(1, txtNoTransaksi.getText());
+                psDetail.setInt(2, idProduk);
+                psDetail.setInt(3, harga);
+                psDetail.setInt(4, jumlah);
+                psDetail.setInt(5, subtotal);
+
+                psDetail.executeUpdate();
+            }
+
+            JOptionPane.showMessageDialog(this, "Transaksi berhasil disimpan");
+
+            resetForm();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnSimpanCetakActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTanggalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_txtTanggalActionPerformed
+
+    private void btnKeuanganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeuanganActionPerformed
+        try {
+            laporanKeuanganHarian laporan = new laporanKeuanganHarian(namaKasir, idKasir);
+
+            laporan.setVisible(true);
+            laporan.setLocationRelativeTo(null);
+
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnKeuanganActionPerformed
+
+    private void btnHistoryProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoryProdukActionPerformed
+        try {
+            riwayatPenjualanProduk history = new riwayatPenjualanProduk(namaKasir, idKasir);
+
+            history.setVisible(true);
+            history.setLocationRelativeTo(null);
+
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnHistoryProdukActionPerformed
+
+    private void tblLayananMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLayananMouseClicked
+        int baris = tblLayanan.getSelectedRow();
+
+        if (baris != -1) {
+            String idBarang = tblLayanan.getValueAt(baris, 0).toString();
+            String namaBarang = tblLayanan.getValueAt(baris, 1).toString();
+            String harga = tblLayanan.getValueAt(baris, 2).toString();
+
+            txtIdBarang.setText(idBarang);
+            txtNamaBarang.setText(namaBarang);
+            txtHarga.setText(harga);
+        }
+    }//GEN-LAST:event_tblLayananMouseClicked
+
+    private void txtNamaBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaBarangActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNamaBarangActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * @param args the command line arguments
@@ -736,15 +883,84 @@ public class DashboardKasir extends javax.swing.JFrame {
             hitungTotal();
         }
     }
+
     
+
+  
+    private void ambilIdKasir() {
+        try {
+            Connection c = koneksi.getConnection();
+            String sql = "SELECT id FROM user WHERE nama = ?";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1, namaKasir);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                idKasir = rs.getInt("id");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal ambil ID Kasir");
+        }
+    }
+
+    private void resetForm() {
+        txtNoTransaksi.setText("");
+        txtIdCustomer.setText("");
+        txtNamaCustomer.setText("");
+        txtIdBarang.setText("");
+        txtNamaBarang.setText("");
+        txtHarga.setText("");
+        txtJumlah.setText("");
+        txtTotal.setText("");
+        txtBayar.setText("");
+        txtKembalian.setText("");
+        txtTotalPembayaran.setText("Rp.0");
+
+        DefaultTableModel model = (DefaultTableModel) tblTransaksi.getModel();
+        model.setRowCount(0);
+
+        tanggalJam();
+        tampilNoTransaksi();
+        tampilIdCustomer();
+    }
+
+    private String getTanggalSekarang() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
+    }
+
+    private void loadLayanan() {
+        DefaultTableModel model = (DefaultTableModel) tblLayanan.getModel();
+        model.setRowCount(0);
+
+        try {
+            Connection con = koneksi.getConnection(); // SESUAIKAN DENGAN PUNYAMU
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT id, nama_produk, harga FROM produk");
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("id"),
+                    rs.getString("nama_produk"),
+                    rs.getInt("harga")
+                };
+                model.addRow(row);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Gagal load layanan: " + e.getMessage());
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnHistoryProduk;
+    private javax.swing.JButton btnKeuangan;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnSimpanCetak;
     private javax.swing.JButton btnTambah;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -758,20 +974,18 @@ public class DashboardKasir extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblNama;
+    private javax.swing.JPanel panelProduk;
+    private javax.swing.JPanel pnlProduk;
+    private javax.swing.JTable tblLayanan;
     private javax.swing.JTable tblTransaksi;
-    private javax.swing.JToggleButton tglCuciKering;
-    private javax.swing.JToggleButton tglCuciSepatu;
-    private javax.swing.JToggleButton tglCuciSetrika;
-    private javax.swing.JToggleButton tglKarpet;
-    private javax.swing.JToggleButton tglSetrikaSaja;
     private javax.swing.JTextField txtBayar;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtIdBarang;

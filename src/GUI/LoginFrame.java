@@ -4,6 +4,9 @@
  */
 package GUI;
 
+import java.awt.Color;
+import javax.swing.plaf.basic.BasicButtonUI;
+
 /**
  *
  * @author LENOVO
@@ -15,6 +18,22 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public LoginFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        styleButtons();
+    }
+    private void styleButtons() {
+        // GANTI dengan nama tombol punyamu
+        // contoh: jButtonSearch, jButtonRefresh
+
+        // Tombol SEARCH (misal biru)
+        // tombol logout
+        btnLogin.setUI(new BasicButtonUI());            // <- ganti dengan nama tombolmu
+        btnLogin.setBackground(new Color(143,182,195));   // merah, boleh diganti
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setFocusPainted(false);
+        btnLogin.setBorderPainted(false);
+        btnLogin.setContentAreaFilled(true);
+        btnLogin.setOpaque(true);
     }
 
     /**
@@ -54,8 +73,9 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
 
-        btnLogin.setBackground(new java.awt.Color(102, 255, 255));
+        btnLogin.setBackground(new java.awt.Color(143, 182, 195));
         btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,6 +201,8 @@ public class LoginFrame extends javax.swing.JFrame {
                     new DashboardAdmin(nama).setVisible(true);
                 } else if (jabatan.equalsIgnoreCase("kasir")) {
                     new DashboardKasir(nama).setVisible(true);
+                } else if (jabatan.equalsIgnoreCase("Owner")) {
+                    new DashboardOwner(nama).setVisible(true);
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(this, "Jabatan tidak dikenali!");
                 }

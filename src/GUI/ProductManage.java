@@ -7,6 +7,16 @@ package GUI;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+
+
 
 public class ProductManage extends javax.swing.JPanel {
 
@@ -14,7 +24,7 @@ public class ProductManage extends javax.swing.JPanel {
 
     public ProductManage() {
         initComponents();
-        
+
     }
 
     /**
@@ -113,7 +123,6 @@ public class ProductManage extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Harga harus berupa angka!");
                 return;
             }
-
             // panggil method tambah produk
             addProduct(nama, jenis, harga, satuan, keterangan);
 
@@ -125,103 +134,103 @@ public class ProductManage extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         int row = tabelProduk.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Pilih produk yang ingin dihapus!");
-        return;
-    }
-
-    // ambil id produk dari kolom pertama (sesuaikan index-nya)
-    String id = tabelProduk.getValueAt(row, 0).toString();
-
-    int confirm = JOptionPane.showConfirmDialog(this, 
-        "Yakin ingin menghapus produk ini?", 
-        "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
-
-    if (confirm == JOptionPane.YES_OPTION) {
-        try {
-            Connection c = koneksi.getConnection();
-            String sql = "DELETE FROM produk WHERE id_produk = ?";
-            PreparedStatement p = c.prepareStatement(sql);
-            p.setString(1, id);
-            p.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "Produk berhasil dihapus!");
-            loadTableProduct(); // refresh data
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih produk yang ingin dihapus!");
+            return;
         }
-    }
+
+        // ambil id produk dari kolom pertama (sesuaikan index-nya)
+        String id = tabelProduk.getValueAt(row, 0).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Yakin ingin menghapus produk ini?",
+                "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                Connection c = koneksi.getConnection();
+                String sql = "DELETE FROM produk WHERE id = ?";
+                PreparedStatement p = c.prepareStatement(sql);
+                p.setString(1, id);
+                p.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Produk berhasil dihapus!");
+                loadTableProduct(); // refresh data
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-     int row = tabelProduk.getSelectedRow();  // ganti sesuai nama JTable kamu
-    if (row != -1) {
-        // ambil id produk dari kolom pertama
-        int id = Integer.parseInt(tabelProduk.getValueAt(row, 0).toString());
+        int row = tabelProduk.getSelectedRow();  // ganti sesuai nama JTable kamu
+        if (row != -1) {
+            // ambil id produk dari kolom pertama
+            int id = Integer.parseInt(tabelProduk.getValueAt(row, 0).toString());
 
-        // ambil nilai lama dari tabel untuk dijadikan default input
-        String nama = JOptionPane.showInputDialog("Ubah Nama Produk:", tabelProduk.getValueAt(row, 1));
-        String jenis = JOptionPane.showInputDialog("Ubah Jenis Produk:", tabelProduk.getValueAt(row, 2));
-        String hargaStr = JOptionPane.showInputDialog("Ubah Harga:", tabelProduk.getValueAt(row, 3));
-        String satuan = JOptionPane.showInputDialog("Ubah Satuan:", tabelProduk.getValueAt(row, 4));
-        String keterangan = JOptionPane.showInputDialog("Ubah Keterangan:", tabelProduk.getValueAt(row, 5));
+            // ambil nilai lama dari tabel untuk dijadikan default input
+            String nama = JOptionPane.showInputDialog("Ubah Nama Produk:", tabelProduk.getValueAt(row, 1));
+            String jenis = JOptionPane.showInputDialog("Ubah Jenis Produk:", tabelProduk.getValueAt(row, 2));
+            String hargaStr = JOptionPane.showInputDialog("Ubah Harga:", tabelProduk.getValueAt(row, 3));
+            String satuan = JOptionPane.showInputDialog("Ubah Satuan:", tabelProduk.getValueAt(row, 4));
+            String keterangan = JOptionPane.showInputDialog("Ubah Keterangan:", tabelProduk.getValueAt(row, 5));
 
-        // validasi input kosong
-        if (nama == null || jenis == null || hargaStr == null || satuan == null || keterangan == null) {
-            JOptionPane.showMessageDialog(this, "Update dibatalkan!");
-            return;
+            // validasi input kosong
+            if (nama == null || jenis == null || hargaStr == null || satuan == null || keterangan == null) {
+                JOptionPane.showMessageDialog(this, "Update dibatalkan!");
+                return;
+            }
+
+            // konversi harga dari String ke double
+            double harga;
+            try {
+                harga = Double.parseDouble(hargaStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Harga harus berupa angka!");
+                return;
+            }
+
+            // panggil fungsi update
+            updateProduct(id, nama, jenis, harga, satuan, keterangan);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih produk yang ingin diupdate!");
         }
-
-        // konversi harga dari String ke double
-        double harga;
-        try {
-            harga = Double.parseDouble(hargaStr);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Harga harus berupa angka!");
-            return;
-        }
-
-        // panggil fungsi update
-        updateProduct(id, nama, jenis, harga, satuan, keterangan);
-
-    } else {
-        JOptionPane.showMessageDialog(this, "Pilih produk yang ingin diupdate!");
-    }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String keyword = txtCari.getText();
 
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("ID");
-    model.addColumn("Nama Produk");
-    model.addColumn("Jenis");
-    model.addColumn("Harga");
-    model.addColumn("Satuan");
-    model.addColumn("Keterangan");
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Nama Produk");
+        model.addColumn("Jenis");
+        model.addColumn("Harga");
+        model.addColumn("Satuan");
+        model.addColumn("Keterangan");
 
-    try {
-        Connection c = koneksi.getConnection();
-        String sql = "SELECT * FROM produk WHERE nama_produk LIKE ? OR jenis LIKE ?";
-        PreparedStatement p = c.prepareStatement(sql);
-        p.setString(1, "%" + keyword + "%");
-        p.setString(2, "%" + keyword + "%");
-        ResultSet r = p.executeQuery();
+        try {
+            Connection c = koneksi.getConnection();
+            String sql = "SELECT * FROM produk WHERE nama_produk LIKE ? OR jenis LIKE ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1, "%" + keyword + "%");
+            p.setString(2, "%" + keyword + "%");
+            ResultSet r = p.executeQuery();
 
-        while (r.next()) {
-            model.addRow(new Object[]{
-                r.getString("id"),
-                r.getString("nama_produk"),
-                r.getString("jenis"),
-                r.getString("harga"),
-                r.getString("satuan"),
-                r.getString("keterangan")
-            });
+            while (r.next()) {
+                model.addRow(new Object[]{
+                    r.getString("id"),
+                    r.getString("nama_produk"),
+                    r.getString("jenis"),
+                    r.getString("harga"),
+                    r.getString("satuan"),
+                    r.getString("keterangan")
+                });
+            }
+            tabelProduk.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Pencarian gagal: " + e.getMessage());
         }
-        tabelProduk.setModel(model);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Pencarian gagal: " + e.getMessage());
-    }
     }//GEN-LAST:event_btnSearchActionPerformed
 
 
@@ -266,7 +275,7 @@ public class ProductManage extends javax.swing.JPanel {
     }
 
     // ==================== ADD PRODUK ====================
-    private void addProduct(String nama, String jenis, double harga, String satuan, String keterangan) {
+    private void addProduct(String nama, String jenis, double harga, String satuan, String keterangan ) {
         try {
             Connection c = koneksi.getConnection();
             String sql = "INSERT INTO produk (nama_produk, jenis, harga, satuan, keterangan) VALUES (?, ?, ?, ?, ?)";
